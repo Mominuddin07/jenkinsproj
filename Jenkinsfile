@@ -1,8 +1,8 @@
-/* Requires the Docker Pipeline plugin */
 pipeline {
   agent any
   environment {
-    PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
+    // Appends these to the existing PATH safely
+    PATH+EXTRA = "/opt/homebrew/bin:/usr/local/bin"
   }
   stages {
     stage('Diagnostics') {
@@ -10,8 +10,6 @@ pipeline {
         sh 'echo PATH=$PATH'
         sh 'which docker || echo "docker not in PATH"'
         sh 'docker version || true'
-        sh 'ls -l /var/run/docker.sock || true'
-        sh 'id'
       }
     }
     stage('Run Maven in Docker') {
